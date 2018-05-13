@@ -1,0 +1,1 @@
+cmd_/var/lib/dkms/amdgpu/1.8-118/build/amd/lib/amdchash.o := ld -m elf_x86_64 -z max-page-size=0x200000   -r -o /var/lib/dkms/amdgpu/1.8-118/build/amd/lib/amdchash.o /var/lib/dkms/amdgpu/1.8-118/build/amd/lib/chash.o 
