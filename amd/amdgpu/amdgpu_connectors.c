@@ -37,6 +37,10 @@
 
 #include <linux/pm_runtime.h>
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 16, 0)
+extern void drm_edid_to_eld(struct drm_connector *connector, struct edid *edid);
+#endif
+
 void amdgpu_connector_hotplug(struct drm_connector *connector)
 {
 	struct drm_device *dev = connector->dev;

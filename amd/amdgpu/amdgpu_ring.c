@@ -32,6 +32,7 @@
 #include <drm/drmP.h>
 #include <drm/amdgpu_drm.h>
 #include "amdgpu.h"
+#include "kcl/kcl_fs.h"
 #include "atom.h"
 
 /*

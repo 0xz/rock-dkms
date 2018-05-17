@@ -229,7 +229,10 @@ void amdgpu_irq_fini(struct amdgpu_device *adev)
 {
 	unsigned i, j;
 
+//// https://patchwork.kernel.org/patch/9746221/
+#if LINUX_VERSION_CODE <= KERNEL_VERSION(4, 13, 0)
 	drm_vblank_cleanup(adev->ddev);
+#endif
 	if (adev->irq.installed) {
 		drm_irq_uninstall(adev->ddev);
 		adev->irq.installed = false;

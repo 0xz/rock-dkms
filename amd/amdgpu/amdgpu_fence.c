@@ -38,6 +38,10 @@
 #include "amdgpu.h"
 #include "amdgpu_trace.h"
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 16, 0)
+int setup_timer(int clock_id, int flags, int interval, timer_t *tm1);
+#endif
+
 /*
  * Fences
  * Fences mark an event in the GPUs pipeline and are used
@@ -286,7 +290,11 @@ static void amdgpu_fence_fallback(unsigned long arg)
  */
 int amdgpu_fence_wait_empty(struct amdgpu_ring *ring)
 {
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0)
+	uint64_t seq = READ_ONCE(ring->fence_drv.sync_seq);
+#else
 	uint64_t seq = ACCESS_ONCE(ring->fence_drv.sync_seq);
+#endif
 	struct dma_fence *fence, **ptr;
 	int r;
 
@@ -350,7 +358,11 @@ unsigned amdgpu_fence_count_emitted(struct amdgpu_ring *ring)
 	amdgpu_fence_process(ring);
 	emitted = 0x100000000ull;
 	emitted -= atomic_read(&ring->fence_drv.last_seq);
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0)
+	emitted += READ_ONCE(ring->fence_drv.sync_seq);
+#else
 	emitted += ACCESS_ONCE(ring->fence_drv.sync_seq);
+#endif
 	return lower_32_bits(emitted);
 }
 
@@ -421,8 +433,13 @@ int amdgpu_fence_driver_init_ring(struct amdgpu_ring *ring,
 	atomic_set(&ring->fence_drv.last_seq, 0);
 	ring->fence_drv.initialized = false;
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 16, 0)
+	setup_timer((size_t)&ring->fence_drv.fallback_timer, 0, amdgpu_fence_fallback,
+		    (unsigned long)ring);
+#else
 	setup_timer(&ring->fence_drv.fallback_timer, amdgpu_fence_fallback,
 		    (unsigned long)ring);
+#endif
 
 	ring->fence_drv.num_fences_mask = num_hw_submission * 2 - 1;
 	spin_lock_init(&ring->fence_drv.lock);

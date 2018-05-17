@@ -20,6 +20,7 @@
  * Authors: Rafał Miłecki <zajec5@gmail.com>
  *          Alex Deucher <alexdeucher@gmail.com>
  */
+#include "kcl/kcl_hwmon.h"
 #include <drm/drmP.h>
 #include "amdgpu.h"
 #include "amdgpu_drv.h"

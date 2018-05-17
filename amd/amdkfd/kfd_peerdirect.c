@@ -174,7 +174,11 @@ static void free_callback(void *client_priv)
 	/* amdkfd will free resources when we return from this callback.
 	 * Set flag to inform that there is nothing to do on "put_pages", etc.
 	 */
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0)
+	WRITE_ONCE(mem_context->free_callback_called, 1);
+#else
 	ACCESS_ONCE(mem_context->free_callback_called) = 1;
+#endif
 }
 
 
@@ -371,7 +375,11 @@ static void amd_put_pages(struct sg_table *sg_head, void *client_context)
 	pr_debug("mem_context->p2p_info %p\n",
 				mem_context->p2p_info);
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0)
+	if (READ_ONCE(mem_context->free_callback_called)) {
+#else
 	if (ACCESS_ONCE(mem_context->free_callback_called)) {
+#endif
 		pr_debug("Free callback was called\n");
 		return;
 	}

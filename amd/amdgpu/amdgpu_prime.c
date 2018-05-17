@@ -30,6 +30,39 @@
 #include <drm/amdgpu_drm.h>
 #include <linux/dma-buf.h>
 
+
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 16, 0)
+// No longer has available header
+extern int drm_gem_map_attach(struct dma_buf *dma_buf,
+			      struct device *target_dev,
+			      struct dma_buf_attachment *attach);
+extern void drm_gem_map_detach(struct dma_buf *dma_buf,
+			       struct dma_buf_attachment *attach);
+
+extern struct sg_table *drm_gem_map_dma_buf(struct dma_buf_attachment *attach,
+					    enum dma_data_direction dir);
+extern void drm_gem_unmap_dma_buf(struct dma_buf_attachment *attach,
+				  struct sg_table *sgt,
+				  enum dma_data_direction dir);
+extern void *drm_gem_dmabuf_kmap_atomic(struct dma_buf *dma_buf,
+					unsigned long page_num);
+extern void *drm_gem_dmabuf_kmap(struct dma_buf *dma_buf,
+				 unsigned long page_num);
+
+extern void drm_gem_dmabuf_kunmap_atomic(struct dma_buf *dma_buf,
+					 unsigned long page_num, void *addr);
+
+extern void drm_gem_dmabuf_kunmap(struct dma_buf *dma_buf,
+				  unsigned long page_num, void *addr);
+
+extern int drm_gem_dmabuf_mmap(struct dma_buf *dma_buf,
+			       struct vm_area_struct *vma);
+
+extern void *drm_gem_dmabuf_vmap(struct dma_buf *dma_buf);
+
+extern void drm_gem_dmabuf_vunmap(struct dma_buf *dma_buf, void *vaddr);
+#endif
+
 static const struct dma_buf_ops amdgpu_dmabuf_ops;
 
 struct sg_table *amdgpu_gem_prime_get_sg_table(struct drm_gem_object *obj)

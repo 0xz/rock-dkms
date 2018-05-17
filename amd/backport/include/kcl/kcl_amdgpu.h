@@ -2,7 +2,7 @@
 #define AMDGPU_BACKPORT_KCL_AMDGPU_H
 
 #include <linux/version.h>
-#include <amdgpu.h>
+#include "amdgpu/amdgpu.h"
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 4, 0) || \
 		defined(OS_NAME_RHEL_6) || \

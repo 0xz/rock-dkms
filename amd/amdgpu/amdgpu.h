@@ -35,6 +35,28 @@
 #include <linux/rbtree.h>
 #include <linux/hashtable.h>
 
+#include "kcl/kcl_drm.h"
+#include "kcl/kcl_kernel.h"
+#include "kcl/kcl_kthread.h"
+#include "kcl/kcl_reservation.h"
+#include "kcl/kcl_vga_switcheroo.h"
+
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)
+#define drm_hdmi_avi_infoframe_from_display_mode(x, y) \
+						drm_hdmi_avi_infoframe_from_display_mode(x, y, 0)
+#endif
+
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0)
+#define release_pages(x, y, z) \
+						release_pages(x, y)
+#endif
+
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 16, 0)
+#define drm_encoder_find(x, y) \
+						drm_encoder_find(x, 0, y)
+#endif
+
+
 #include <drm/ttm/ttm_bo_api.h>
 #include <drm/ttm/ttm_bo_driver.h>
 #include <drm/ttm/ttm_placement.h>
@@ -49,6 +71,7 @@
 #include <kgd_kfd_interface.h>
 #include "dm_pp_interface.h"
 #include "kgd_pp_interface.h"
+
 
 #include "amd_shared.h"
 #include "amdgpu_mode.h"

@@ -955,11 +955,20 @@ static int amdgpu_debugfs_gem_bo_info(int id, void *ptr, void *data)
 	seq_printf(m, "\t0x%08x: %12ld byte %s",
 		   id, amdgpu_bo_size(bo), placement);
 
+
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0)
+	offset = READ_ONCE(bo->tbo.mem.start);
+#else
 	offset = ACCESS_ONCE(bo->tbo.mem.start);
+#endif
 	if (offset != AMDGPU_BO_INVALID_OFFSET)
 		seq_printf(m, " @ 0x%010Lx", offset);
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0)
+	pin_count = READ_ONCE(bo->pin_count);
+#else
 	pin_count = ACCESS_ONCE(bo->pin_count);
+#endif
 	if (pin_count)
 		seq_printf(m, " pin count %d", pin_count);
 	seq_printf(m, "\n");

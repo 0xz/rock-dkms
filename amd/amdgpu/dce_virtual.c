@@ -269,7 +269,9 @@ static const struct drm_crtc_helper_funcs dce_virtual_crtc_helper_funcs = {
 	.mode_set_base_atomic = dce_virtual_crtc_set_base_atomic,
 	.prepare = dce_virtual_crtc_prepare,
 	.commit = dce_virtual_crtc_commit,
+#if LINUX_VERSION_CODE <= KERNEL_VERSION(4, 13, 0)
 	.load_lut = dce_virtual_crtc_load_lut,
+#endif
 	.disable = dce_virtual_crtc_disable,
 };
 

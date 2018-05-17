@@ -629,6 +629,7 @@ static int init_user_pages(struct kgd_mem *mem, struct mm_struct *mm,
 release_out:
 	if (ret)
 		release_pages(mem->user_pages, bo->tbo.ttm->num_pages, 0);
+
 free_out:
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 12, 0)
 	drm_free_large(mem->user_pages);
@@ -1362,7 +1363,8 @@ int amdgpu_amdkfd_gpuvm_free_memory_of_gpu(
 		pr_debug("%s: Freeing user_pages array\n", __func__);
 		if (mem->user_pages[0])
 			release_pages(mem->user_pages,
-				      mem->bo->tbo.ttm->num_pages, 0);
+					      mem->bo->tbo.ttm->num_pages, 0);
+
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 12, 0)
 		drm_free_large(mem->user_pages);
 #else

@@ -262,7 +262,7 @@ _kcl_drm_atomic_helper_update_legacy_modeset_state_stub(struct drm_device *dev,
 	int i;
 
 	/* clear out existing links and update dpms */
-	for_each_connector_in_state(old_state, connector, old_conn_state, i) {
+	for_each_old_connector_in_state(old_state, connector, old_conn_state, i) {
 		if (connector->encoder) {
 			WARN_ON(!connector->encoder->crtc);
 
@@ -287,7 +287,7 @@ _kcl_drm_atomic_helper_update_legacy_modeset_state_stub(struct drm_device *dev,
 	}
 
 	/* set new links */
-	for_each_connector_in_state(old_state, connector, old_conn_state, i) {
+	for_each_old_connector_in_state(old_state, connector, old_conn_state, i) {
 		if (!connector->state->crtc)
 			continue;
 
@@ -299,7 +299,7 @@ _kcl_drm_atomic_helper_update_legacy_modeset_state_stub(struct drm_device *dev,
 	}
 
 	/* set legacy state in the crtc structure */
-	for_each_crtc_in_state(old_state, crtc, old_crtc_state, i) {
+	for_each_old_crtc_in_state (old_state, crtc, old_crtc_state, i) {
 		struct drm_plane *primary = crtc->primary;
 
 		crtc->mode = crtc->state->mode;
@@ -650,10 +650,10 @@ static void drm_atomic_print_state(const struct drm_atomic_state *state)
 	for_each_plane_in_state(state, plane, plane_state, i)
 		drm_atomic_plane_print_state(&p, plane_state);
 
-	for_each_crtc_in_state(state, crtc, crtc_state, i)
+	for_each_old_crtc_in_state (state, crtc, crtc_state, i)
 		drm_atomic_crtc_print_state(&p, crtc_state);
 
-	for_each_connector_in_state(state, connector, connector_state, i)
+	for_each_old_connector_in_state(state, connector, connector_state, i)
 		drm_atomic_connector_print_state(&p, connector_state);
 }
 

@@ -23,6 +23,7 @@
  *
  */
 
+#include "kcl/kcl_fs.h"
 #include <linux/kthread.h>
 #include <drm/drmP.h>
 #include <linux/debugfs.h>

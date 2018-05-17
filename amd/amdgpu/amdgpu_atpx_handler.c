@@ -13,6 +13,8 @@
 #include <linux/delay.h>
 
 #include "amd_acpi.h"
+#include "kcl/kcl_vga_switcheroo.h"
+
 
 #define AMDGPU_PX_QUIRK_FORCE_ATPX  (1 << 0)
 

@@ -360,8 +360,10 @@ static void amdgpu_crtc_fb_gamma_get(struct drm_crtc *crtc, u16 *red, u16 *green
 }
 
 static const struct drm_fb_helper_funcs amdgpu_fb_helper_funcs = {
+#if LINUX_VERSION_CODE <= KERNEL_VERSION(4, 13, 0)
 	.gamma_set = amdgpu_crtc_fb_gamma_set,
 	.gamma_get = amdgpu_crtc_fb_gamma_get,
+#endif
 	.fb_probe = amdgpufb_create,
 };
 
